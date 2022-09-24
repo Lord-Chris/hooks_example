@@ -36,7 +36,7 @@ class FirstScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const SecondScreen()),
+                    MaterialPageRoute(builder: (_) => SecondScreen()),
                   );
                 },
                 style: OutlinedButton.styleFrom(
