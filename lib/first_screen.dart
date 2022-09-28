@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'second_screen.dart';
 
-class FirstScreen extends StatelessWidget {
+class FirstScreen extends HookWidget {
   const FirstScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final controller = useTextEditingController();
+    final buttonIsVisible = useListenableSelector(
+        controller, () => controller.text == "Flutter Hooks");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey,
@@ -14,13 +18,14 @@ class FirstScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          const Expanded(
+          Expanded(
             flex: 3,
             child: Center(
               child: Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: TextField(
-                  decoration: InputDecoration(
+                  controller: controller,
+                  decoration: const InputDecoration(
                     labelText: "Enter Text...",
                     enabledBorder: OutlineInputBorder(),
                     focusedBorder: OutlineInputBorder(),
@@ -31,23 +36,26 @@ class FirstScreen extends StatelessWidget {
           ),
           Expanded(
             flex: 2,
-            child: Center(
-              child: OutlinedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => SecondScreen()),
-                  );
-                },
-                style: OutlinedButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-                  backgroundColor: Colors.blueGrey,
-                ),
-                child: const Text(
-                  "Proceed",
-                  style: TextStyle(
-                    color: Colors.white,
+            child: Visibility(
+              visible: buttonIsVisible,
+              child: Center(
+                child: OutlinedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const SecondScreen()),
+                    );
+                  },
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 25, vertical: 20),
+                    backgroundColor: Colors.blueGrey,
+                  ),
+                  child: const Text(
+                    "Proceed",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
